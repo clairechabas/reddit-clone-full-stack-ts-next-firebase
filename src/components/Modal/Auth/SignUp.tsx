@@ -14,7 +14,7 @@ const SignUp: React.FC = () => {
     confirmPassword: '',
   })
   const [error, setError] = useState('')
-  const [createUserWithEmailAndPassword, user, loading, userError] =
+  const [createUserWithEmailAndPassword, user, loading, fbError] =
     useCreateUserWithEmailAndPassword(auth)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -110,10 +110,10 @@ const SignUp: React.FC = () => {
         mb={2}
       />
 
-      {(error || userError) && (
+      {(error || fbError) && (
         <Text textAlign="center" color="red" fontSize="10pt">
           {error ||
-            FIREBASE_ERRORS[userError?.message as keyof typeof FIREBASE_ERRORS]}
+            FIREBASE_ERRORS[fbError?.message as keyof typeof FIREBASE_ERRORS]}
         </Text>
       )}
 
