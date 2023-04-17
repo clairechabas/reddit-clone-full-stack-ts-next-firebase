@@ -1,7 +1,10 @@
+import React, { useState } from 'react'
 import { authModalState } from '@/src/atoms/authModalAtom'
 import { Button, Flex, Input, Text } from '@chakra-ui/react'
-import React, { useState } from 'react'
 import { useSetRecoilState } from 'recoil'
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
+import { auth } from '@/src/firebase/clientApp'
+import { FIREBASE_ERRORS } from '@/src/firebase/errors'
 
 const SignUp: React.FC = () => {
   const setAuthModalState = useSetRecoilState(authModalState)
@@ -10,8 +13,27 @@ const SignUp: React.FC = () => {
     password: '',
     confirmPassword: '',
   })
+  const [error, setError] = useState('')
+  const [createUserWithEmailAndPassword, user, loading, userError] =
+    useCreateUserWithEmailAndPassword(auth)
 
-  const handleSubmit = () => {}
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    // Reset the error before trying to submit the form
+    if (error) setError('')
+
+    // Check passwords match
+    if (signUpForm.password !== signUpForm.confirmPassword) {
+      setError('Passwords do not match')
+      return
+    }
+
+    // Todo: add password validation here
+
+    createUserWithEmailAndPassword(signUpForm.email, signUpForm.password)
+  }
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSignUpForm((prev) => ({
       ...prev,
@@ -88,7 +110,21 @@ const SignUp: React.FC = () => {
         mb={2}
       />
 
-      <Button width="100%" height="36px" mt={2} mb={2} type="submit">
+      {(error || userError) && (
+        <Text textAlign="center" color="red" fontSize="10pt">
+          {error ||
+            FIREBASE_ERRORS[userError?.message as keyof typeof FIREBASE_ERRORS]}
+        </Text>
+      )}
+
+      <Button
+        width="100%"
+        height="36px"
+        mt={2}
+        mb={2}
+        type="submit"
+        isLoading={loading}
+      >
         Sign Up
       </Button>
 
