@@ -1,28 +1,28 @@
 import { firestore } from '@/src/firebase/clientApp'
 import {
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
   Box,
-  Divider,
-  Text,
-  Input,
-  Stack,
+  Button,
   Checkbox,
+  Divider,
   Flex,
   Icon,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Stack,
+  Text,
 } from '@chakra-ui/react'
-import { auth } from '../../../firebase/clientApp'
-import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore'
+import { doc, runTransaction, serverTimestamp } from 'firebase/firestore'
 import React, { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { BsFillEyeFill, BsFillPersonFill } from 'react-icons/bs'
 import { HiLockClosed } from 'react-icons/hi'
+import { auth } from '../../../firebase/clientApp'
 
 type CreateCommunityModalProps = {
   open: boolean
@@ -74,19 +74,37 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
     try {
       // Because names on Reddit are unique, we can use them as ID
       const communityDocRef = doc(firestore, 'communities', communityName)
-      const communityDoc = await getDoc(communityDocRef)
 
-      // 2. Community name is available
-      if (communityDoc.exists()) {
-        throw new Error(`Sorry, r/${communityName} is taken. Try another name.`)
-      }
+      // Using transactions to make sure a community is created
+      // only if it has been added to a user's `communitySnippets`
+      // or the other way around
+      await runTransaction(firestore, async (transaction) => {
+        // Check if the community exists in DB
+        const communityDoc = await transaction.get(communityDocRef)
+        // 2. If community name is not available, throw error
+        if (communityDoc.exists()) {
+          throw new Error(
+            `Sorry, r/${communityName} is taken. Try another name.`
+          )
+        }
 
-      // Create community
-      await setDoc(communityDocRef, {
-        creatorId: user?.uid,
-        createdAt: serverTimestamp(),
-        numberOfMembers: 1,
-        privacyType: communityType,
+        // 3. Otherwise, create community
+        transaction.set(communityDocRef, {
+          creatorId: user?.uid,
+          createdAt: serverTimestamp(),
+          numberOfMembers: 1,
+          privacyType: communityType,
+        })
+
+        // create community snippet on our User document
+        transaction.set(
+          doc(firestore, `users/${user?.uid}/communitySnippets`, communityName),
+          {
+            communityId: communityName,
+            // The creator of a community is automatically its moderator
+            isModerator: true,
+          }
+        )
       })
     } catch (error: any) {
       console.log('Error in handleCreateCommunity', error)
