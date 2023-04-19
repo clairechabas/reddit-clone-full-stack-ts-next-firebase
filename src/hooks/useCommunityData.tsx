@@ -65,7 +65,7 @@ const useCommunityData = () => {
         ...prev,
         userSnippets: snippets as CommunitySnippet[],
       }))
-    } catch (error) {
+    } catch (error: any) {
       console.log('Error in getUserSnippets', error)
       setError(error.message)
     }
@@ -108,7 +108,7 @@ const useCommunityData = () => {
         userSnippets: [...prev.userSnippets, newSnippet],
       }))
       setLoading(false)
-    } catch (error) {
+    } catch (error: any) {
       console.log('Error in joinCommunity', error)
       setError(error.message)
     }
@@ -143,7 +143,7 @@ const useCommunityData = () => {
           (snippet) => snippet.communityId !== communityId
         ),
       }))
-    } catch (error) {
+    } catch (error: any) {
       console.log('Error in leaveCommunity', error)
       setError(error.message)
     }
