@@ -97,15 +97,15 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
 
       setSelectedFile('')
       setTextInputs({ title: '', body: '' })
+
+      // Redirect to community page
+      router.back()
     } catch (error: any) {
       console.log('Error in handleCreatePost', error.message)
       setError(true)
     }
 
     setLoading(false)
-
-    // Redirect to community page
-    router.back()
   }
 
   const handleSelectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
