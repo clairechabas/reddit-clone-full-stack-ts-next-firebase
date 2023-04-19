@@ -1,7 +1,10 @@
+import { communityState } from '@/src/atoms/communitiesAtom'
 import { Post } from '@/src/atoms/postAtom'
+import About from '@/src/components/Community/About'
 import PageContent from '@/src/components/Layout/PageContent'
 import PostItem from '@/src/components/Posts/PostItem'
 import { auth, firestore } from '@/src/firebase/clientApp'
+import useCommunityData from '@/src/hooks/useCommunityData'
 import usePosts from '@/src/hooks/usePosts'
 import { doc, getDoc } from 'firebase/firestore'
 import { useRouter } from 'next/router'
@@ -10,6 +13,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 
 const PostPage: React.FC = () => {
   const { postStateValue, setPostStateValue, onDeletePost, onVote } = usePosts()
+  const { communityStateValue } = useCommunityData()
   const [user] = useAuthState(auth)
   const router = useRouter()
 
@@ -27,8 +31,10 @@ const PostPage: React.FC = () => {
   }
 
   useEffect(() => {
-    // Do wee need to fetch the post
-    // meaning the user is not coming from the community page
+    /** Handling user not coming from community page
+     * (either by refreshing page or arriving via URL directly).
+     * In which case we need to fetch the post.
+     * */
     const { pid } = router.query
 
     if (pid && !postStateValue.selectedPost) {
@@ -55,7 +61,11 @@ const PostPage: React.FC = () => {
         {/* Comments */}
       </>
 
-      <>{/* About */}</>
+      <>
+        {communityStateValue.currentCommunity && (
+          <About communityData={communityStateValue.currentCommunity} />
+        )}
+      </>
     </PageContent>
   )
 }

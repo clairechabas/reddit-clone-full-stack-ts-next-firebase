@@ -13,8 +13,10 @@ import {
   writeBatch,
   doc,
   increment,
+  getDoc,
 } from 'firebase/firestore'
 import { authModalState } from '../atoms/authModalAtom'
+import { useRouter } from 'next/router'
 
 const useCommunityData = () => {
   const [user] = useAuthState(auth)
@@ -23,6 +25,7 @@ const useCommunityData = () => {
     useRecoilState(communityState)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const router = useRouter()
 
   /**
    * Handling switch between leaving/joining community
@@ -151,6 +154,23 @@ const useCommunityData = () => {
     setLoading(false)
   }
 
+  const getCommunityData = async (communityId: string) => {
+    try {
+      const communityDocRef = doc(firestore, 'commmunities', communityId)
+      const communityDoc = await getDoc(communityDocRef)
+
+      setCommunityStateValue((prev) => ({
+        ...prev,
+        currentCommunity: {
+          id: communityDoc.id,
+          ...communityDoc.data(),
+        } as Community,
+      }))
+    } catch (error) {
+      console.log('Error in getCommunityData', error)
+    }
+  }
+
   useEffect(() => {
     /** Clearing users' community snippets on logout */
     if (!user) {
@@ -164,6 +184,18 @@ const useCommunityData = () => {
 
     getUserSnippets()
   }, [user])
+
+  useEffect(() => {
+    /** Handling user not coming from community page
+     * (either by refreshing page or arriving via URL directly).
+     * In which case we need to fetch the community data.
+     * */
+    const { communityId } = router.query
+
+    if (communityId && !communityStateValue.currentCommunity) {
+      getCommunityData(communityId as string)
+    }
+  }, [router.query, communityStateValue.currentCommunity])
 
   return {
     communityStateValue,
