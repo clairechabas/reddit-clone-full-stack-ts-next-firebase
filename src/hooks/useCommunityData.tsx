@@ -152,7 +152,15 @@ const useCommunityData = () => {
   }
 
   useEffect(() => {
-    if (!user) return
+    /** Clearing users' community snippets on logout */
+    if (!user) {
+      setCommunityStateValue((prev) => ({
+        ...prev,
+        userSnippets: [],
+      }))
+
+      return
+    }
 
     getUserSnippets()
   }, [user])

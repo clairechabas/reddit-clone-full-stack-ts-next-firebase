@@ -27,7 +27,7 @@ type PostItemProps = {
   post: Post
   userIsCreator: boolean
   userVoteValue?: number
-  onVote: () => {}
+  onVote: (post: Post, vote: number, communityId: string) => void
   onDeletePost: (post: Post) => Promise<boolean>
   onSelectPost: () => void
 }
@@ -53,8 +53,6 @@ const PostItem: React.FC<PostItemProps> = ({
       if (!success) {
         throw new Error('Failed to delete post')
       }
-
-      console.log('post successfully deleted')
     } catch (error: any) {
       setError(error.message)
     }
@@ -87,7 +85,7 @@ const PostItem: React.FC<PostItemProps> = ({
           color={userVoteValue === 1 ? 'brand.100' : 'gray.400'}
           fontSize={22}
           cursor="pointer"
-          onClick={onVote}
+          onClick={() => onVote(post, 1, post.communityId)}
         />
         <Text fontSize="9pt">{post.voteStatus}</Text>
         <Icon
@@ -99,7 +97,7 @@ const PostItem: React.FC<PostItemProps> = ({
           color={userVoteValue === -1 ? '#4379ff' : 'gray.400'}
           fontSize={22}
           cursor="pointer"
-          onClick={onVote}
+          onClick={() => onVote(post, -1, post.communityId)}
         />
       </Flex>
 
@@ -112,7 +110,6 @@ const PostItem: React.FC<PostItemProps> = ({
         )}
         <Stack spacing={1} p="10px">
           <Stack direction="row" spacing={0.6} align="center" fontSize="9pt">
-            {/* Home Page Check */}
             <Text>
               Posted by u/{post.creatorDisplayName}{' '}
               {moment(new Date(post.createdAt?.seconds * 1000)).fromNow()}
