@@ -22,14 +22,20 @@ import {
   Text,
 } from '@chakra-ui/react'
 import moment from 'moment'
+import { useRouter } from 'next/router'
 
 type PostItemProps = {
   post: Post
   userIsCreator: boolean
   userVoteValue?: number
-  onVote: (post: Post, vote: number, communityId: string) => void
+  onVote: (
+    event: React.MouseEvent<SVGElement, MouseEvent>,
+    post: Post,
+    vote: number,
+    communityId: string
+  ) => void
   onDeletePost: (post: Post) => Promise<boolean>
-  onSelectPost: () => void
+  onSelectPost?: (post: Post) => void
 }
 
 const PostItem: React.FC<PostItemProps> = ({
@@ -42,9 +48,16 @@ const PostItem: React.FC<PostItemProps> = ({
 }) => {
   const [loadingImage, setLoadingImage] = useState(true)
   const [loadingDelete, setLoadingDelete] = useState(false)
+  const isSinglePostPage = !onSelectPost
+  const router = useRouter()
   const [error, setError] = useState(false)
 
-  const handleDelete = async () => {
+  const handleDelete = async (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    // Preventing the delete click to redirect to single post page
+    event.stopPropagation()
+
     setLoadingDelete(true)
 
     try {
@@ -52,6 +65,10 @@ const PostItem: React.FC<PostItemProps> = ({
 
       if (!success) {
         throw new Error('Failed to delete post')
+      }
+
+      if (isSinglePostPage) {
+        router.push(`/r/${post.communityId}`)
       }
     } catch (error: any) {
       setError(error.message)
@@ -64,19 +81,19 @@ const PostItem: React.FC<PostItemProps> = ({
     <Flex
       bg="white"
       border="1px solid"
-      borderColor="gray.300"
-      borderRadius={4}
-      _hover={{ borderColor: 'gray.500' }}
-      cursor="pointer"
-      onClick={onSelectPost}
+      borderColor={isSinglePostPage ? 'white' : 'gray.300'}
+      borderRadius={isSinglePostPage ? '4px 4px 0px 0px' : '4px'}
+      _hover={{ borderColor: isSinglePostPage ? 'none' : 'gray.500' }}
+      cursor={isSinglePostPage ? 'unset' : 'pointer'}
+      onClick={() => onSelectPost && onSelectPost(post)}
     >
       <Flex
         direction="column"
         align="center"
-        bg="gray.100"
+        bg={isSinglePostPage ? 'none' : 'gray.100'}
         p={2}
         width="40px"
-        borderRadius={4}
+        borderRadius={isSinglePostPage ? '0' : '3px 0px 0px 3px'}
       >
         <Icon
           as={
@@ -85,7 +102,7 @@ const PostItem: React.FC<PostItemProps> = ({
           color={userVoteValue === 1 ? 'brand.100' : 'gray.400'}
           fontSize={22}
           cursor="pointer"
-          onClick={() => onVote(post, 1, post.communityId)}
+          onClick={(event) => onVote(event, post, 1, post.communityId)}
         />
         <Text fontSize="9pt">{post.voteStatus}</Text>
         <Icon
@@ -97,7 +114,7 @@ const PostItem: React.FC<PostItemProps> = ({
           color={userVoteValue === -1 ? '#4379ff' : 'gray.400'}
           fontSize={22}
           cursor="pointer"
-          onClick={() => onVote(post, -1, post.communityId)}
+          onClick={(event) => onVote(event, post, -1, post.communityId)}
         />
       </Flex>
 
