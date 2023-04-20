@@ -1,5 +1,5 @@
 import { Box, Flex, Icon, Spinner, Stack, Text } from '@chakra-ui/react'
-import { Timestamp } from 'firebase/firestore'
+import { Timestamp, FieldValue } from 'firebase/firestore'
 import React from 'react'
 import { FaReddit } from 'react-icons/fa'
 import moment from 'moment'
@@ -16,7 +16,7 @@ export type Comment = {
   postId: string
   postTitle: string
   text: string
-  createdAt: Timestamp
+  createdAt: Timestamp | FieldValue
 }
 
 type CommentItemProps = {

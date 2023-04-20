@@ -8,7 +8,7 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
-import { Timestamp } from '@google-cloud/firestore'
+import { Timestamp } from 'firebase/firestore'
 import { User } from 'firebase/auth'
 import {
   collection,
