@@ -66,6 +66,7 @@ const useCommunityData = () => {
       setCommunityStateValue((prev) => ({
         ...prev,
         userSnippets: snippets as CommunitySnippet[],
+        snippetsFetched: true,
       }))
     } catch (error: any) {
       console.log('Error in getUserSnippets', error)
@@ -183,6 +184,7 @@ const useCommunityData = () => {
       setCommunityStateValue((prev) => ({
         ...prev,
         userSnippets: [],
+        snippetsFetched: false,
       }))
 
       return
