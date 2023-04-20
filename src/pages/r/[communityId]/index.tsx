@@ -70,7 +70,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
   } catch (error) {
     // Todo: add Next.js error page for getServerSideProps errors
-    console.log('getServerSideProps error', error)
+    console.log('Error in getServerSideProps', error)
   }
 }
 
