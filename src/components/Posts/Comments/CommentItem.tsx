@@ -16,7 +16,7 @@ export type Comment = {
   postId: string
   postTitle: string
   text: string
-  createdAt: Timestamp | FieldValue
+  createdAt?: Timestamp
 }
 
 type CommentItemProps = {
@@ -41,7 +41,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
         <Stack direction="row" align="center" fontSize="8pt">
           <Text fontWeight={700}>{comment.creatorDisplayName}</Text>
           <Text color="gray.600">
-            {moment(new Date(comment.createdAt?.seconds * 1000)).fromNow()}
+            {comment.createdAt &&
+              moment(new Date(comment.createdAt?.seconds * 1000)).fromNow()}
           </Text>
           {loadingDelete && <Spinner size="sm" />}
         </Stack>
