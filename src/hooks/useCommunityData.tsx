@@ -58,7 +58,6 @@ const useCommunityData = () => {
     setLoading(true)
 
     try {
-      // Get user snippets
       const snippetsDocs = await getDocs(
         collection(firestore, `users/${user?.uid}/communitySnippets`)
       )
@@ -89,6 +88,7 @@ const useCommunityData = () => {
       const newSnippet = {
         communityId: communityData.id,
         imageUrl: communityData.imageUrl || '',
+        isModerator: user?.uid === communityData.creatorId,
       }
       batchWrite.set(
         doc(
@@ -154,18 +154,24 @@ const useCommunityData = () => {
     setLoading(false)
   }
 
+  /**
+   * Fetch community data
+   * @param communityId
+   */
   const getCommunityData = async (communityId: string) => {
     try {
       const communityDocRef = doc(firestore, 'commmunities', communityId)
       const communityDoc = await getDoc(communityDocRef)
 
-      setCommunityStateValue((prev) => ({
-        ...prev,
-        currentCommunity: {
-          id: communityDoc.id,
-          ...communityDoc.data(),
-        } as Community,
-      }))
+      if (communityDoc.exists()) {
+        setCommunityStateValue((prev) => ({
+          ...prev,
+          currentCommunity: {
+            id: communityDoc.id,
+            ...communityDoc.data(),
+          } as Community,
+        }))
+      }
     } catch (error) {
       console.log('Error in getCommunityData', error)
     }

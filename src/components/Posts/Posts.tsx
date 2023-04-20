@@ -52,7 +52,7 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
   // Fetch posts when component mounts
   useEffect(() => {
     getPosts()
-  }, [])
+  }, [communityData])
 
   return (
     <>

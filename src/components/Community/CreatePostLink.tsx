@@ -8,11 +8,13 @@ import { authModalState } from '@/src/atoms/authModalAtom'
 import { auth } from '@/src/firebase/clientApp'
 import { IoImageOutline } from 'react-icons/io5'
 import { BsLink45Deg } from 'react-icons/bs'
+import useDirectory from '@/src/hooks/useDirectory'
 
 const CreatePostLink: React.FC = () => {
   const [user] = useAuthState(auth)
   const router = useRouter()
   const setAuthModalState = useSetRecoilState(authModalState)
+  const { toggleMenuOpen } = useDirectory()
 
   /**
    * Clicking on the input redirects user to `submit` page
@@ -25,7 +27,17 @@ const CreatePostLink: React.FC = () => {
     }
 
     const { communityId } = router.query
-    router.push(`/r/${communityId}/submit`)
+
+    if (communityId) {
+      router.push(`/r/${communityId}/submit`)
+      return
+    }
+
+    // If we don't have a `communityId` we're on the home page
+    // in which case we want to open the directory menu for the
+    // user to choose a community (we only want users to post
+    // inside communities).
+    toggleMenuOpen()
   }
 
   return (
