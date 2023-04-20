@@ -16,7 +16,7 @@ import { BiPoll } from 'react-icons/bi'
 import { BsLink45Deg, BsMic } from 'react-icons/bs'
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5'
 import ImageUpload from './ImageUpload'
-import TabItem from './TabItem'
+import Tab from './Tab'
 import TextInputs from './TextInputs'
 import useSelectFile from '@/src/hooks/useSelectFile'
 
@@ -131,7 +131,7 @@ const NewPostForm: React.FC<NewPostFormProps> = ({
     <Flex direction="column" bg="white" borderRadius={4} mt={2}>
       <Flex width="100%">
         {formTabs.map((item) => (
-          <TabItem
+          <Tab
             key={item.title}
             item={item}
             selected={item.title === selectedTab}
