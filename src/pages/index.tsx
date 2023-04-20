@@ -10,7 +10,7 @@ import {
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { Post } from '../atoms/postAtom'
+import { Post, PostVote } from '../atoms/postAtom'
 import PageContent from '../components/Layout/PageContent'
 import PostItem from '../components/Posts/PostItem'
 import PostLoader from '../components/Posts/PostLoader'
@@ -89,19 +89,51 @@ const Home: NextPage = () => {
     setLoading(false)
   }
 
-  const getUserPostVotes = () => {}
+  const getUserPostVotes = async () => {
+    try {
+      const postsIds = postStateValue.posts.map((post) => post.id)
+      const postsVotesQuery = query(
+        collection(firestore, `users/${user?.uid}/postVotes`)
+      )
+      const postsVotesDocs = await getDocs(postsVotesQuery)
+      const postsVotes = postsVotesDocs.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }))
+      setPostStateValue((prev) => ({
+        ...prev,
+        postVotes: postsVotes as PostVote[],
+      }))
+    } catch (error) {
+      console.log('Error in getUserPostVotes', error)
+    }
+  }
 
-  /** Do X */
+  /** Fetch home posts for a not signed in user */
   useEffect(() => {
     if (!user && !loadingUser) buildNoUserHomeFeed()
   }, [user, loadingUser])
 
-  /** Do Y */
+  /** Fetch home posts for an authenticated user */
   useEffect(() => {
     if (communityStateValue.snippetsFetched) {
       buildUserHomeFeed()
     }
   }, [communityStateValue.snippetsFetched])
+
+  /** Fetch authenticated user's posts votes */
+  useEffect(() => {
+    if (user && postStateValue.posts.length) getUserPostVotes()
+
+    // Clean up function
+    // Runs on Home component unmount
+    return () => {
+      setPostStateValue((prev) => ({
+        ...prev,
+        postVotes: [],
+      }))
+    }
+  }, [user, postStateValue.posts])
 
   return (
     <PageContent>
