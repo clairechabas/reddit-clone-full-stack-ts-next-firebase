@@ -23,6 +23,8 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { BsFillEyeFill, BsFillPersonFill } from 'react-icons/bs'
 import { HiLockClosed } from 'react-icons/hi'
 import { auth } from '../../../firebase/clientApp'
+import { useRouter } from 'next/router'
+import useDirectory from '@/src/hooks/useDirectory'
 
 type CreateCommunityModalProps = {
   open: boolean
@@ -39,6 +41,8 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
   const [communityType, setCommunityType] = useState('public')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const { toggleMenuOpen } = useDirectory()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length > 21) return
@@ -106,6 +110,10 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
           }
         )
       })
+
+      handleClose()
+      toggleMenuOpen()
+      router.push(`r/${communityName}`)
     } catch (error: any) {
       console.log('Error in handleCreateCommunity', error)
       setError(error.message)
