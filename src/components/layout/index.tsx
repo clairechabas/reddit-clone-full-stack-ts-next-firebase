@@ -1,11 +1,11 @@
 import React from 'react'
 import Navbar from '../Navbar/Navbar'
 
-interface AppLayoutProps {
+interface LayoutProps {
   children: React.ReactNode
 }
 
-const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <>
       <Navbar />
@@ -13,4 +13,4 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     </>
   )
 }
-export default AppLayout
+export default Layout
