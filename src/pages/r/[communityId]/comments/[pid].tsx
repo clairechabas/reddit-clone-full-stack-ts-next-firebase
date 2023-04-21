@@ -1,7 +1,6 @@
-import { communityState } from '@/atoms/communitiesAtom'
 import { Post } from '@/atoms/postAtom'
 import About from '@/components/Community/About'
-import PageContent from '@/components/Layout/PageContent'
+import PageContent from '@/components/layout/PageContent'
 import Comments from '@/components/Posts/Comments/Comments'
 import PostItem from '@/components/Posts/PostItem'
 import { auth, firestore } from '@/firebase/clientApp'

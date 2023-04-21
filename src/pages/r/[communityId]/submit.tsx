@@ -5,7 +5,7 @@ import useCommunityData from '@/hooks/useCommunityData'
 import { Box, Text } from '@chakra-ui/react'
 import React from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import PageContent from '../../../components/Layout/PageContent'
+import PageContent from '../../../components/layout/PageContent'
 
 const SubmitPostPage: React.FC = () => {
   const [user] = useAuthState(auth)
