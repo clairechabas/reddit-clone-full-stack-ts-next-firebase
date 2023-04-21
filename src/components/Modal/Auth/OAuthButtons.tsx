@@ -1,5 +1,5 @@
 import React from 'react'
-import { auth } from '@/src/firebase/clientApp'
+import { auth } from '@/firebase/clientApp'
 import { Flex, Button, Image, Text } from '@chakra-ui/react'
 import { useSignInWithGoogle } from 'react-firebase-hooks/auth'
 

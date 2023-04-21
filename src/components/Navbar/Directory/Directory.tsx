@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { TiHome } from 'react-icons/ti'
 import Communities from './Communities'
-import useDirectory from '@/src/hooks/useDirectory'
+import useDirectory from '@/hooks/useDirectory'
 
 const Directory: React.FC = () => {
   const { directoryState, toggleMenuOpen } = useDirectory()

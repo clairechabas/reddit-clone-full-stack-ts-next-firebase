@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Post } from '@/src/atoms/postAtom'
+import { Post } from '@/atoms/postAtom'
 import { AiOutlineDelete } from 'react-icons/ai'
 import { BsChat, BsDot } from 'react-icons/bs'
 import {

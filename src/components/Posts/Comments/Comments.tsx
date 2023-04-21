@@ -1,5 +1,5 @@
-import { Post, postState } from '@/src/atoms/postAtom'
-import { firestore } from '@/src/firebase/clientApp'
+import { Post, postState } from '@/atoms/postAtom'
+import { firestore } from '@/firebase/clientApp'
 import {
   Box,
   Flex,

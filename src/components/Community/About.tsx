@@ -1,6 +1,6 @@
-import { Community, communityState } from '@/src/atoms/communitiesAtom'
-import { auth, firestore, storage } from '@/src/firebase/clientApp'
-import useSelectFile from '@/src/hooks/useSelectFile'
+import { Community, communityState } from '@/atoms/communitiesAtom'
+import { auth, firestore, storage } from '@/firebase/clientApp'
+import useSelectFile from '@/hooks/useSelectFile'
 import {
   Box,
   Button,

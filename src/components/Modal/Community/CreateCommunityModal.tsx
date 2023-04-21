@@ -1,4 +1,4 @@
-import { firestore } from '@/src/firebase/clientApp'
+import { firestore } from '@/firebase/clientApp'
 import {
   Box,
   Button,
@@ -24,7 +24,7 @@ import { BsFillEyeFill, BsFillPersonFill } from 'react-icons/bs'
 import { HiLockClosed } from 'react-icons/hi'
 import { auth } from '../../../firebase/clientApp'
 import { useRouter } from 'next/router'
-import useDirectory from '@/src/hooks/useDirectory'
+import useDirectory from '@/hooks/useDirectory'
 
 type CreateCommunityModalProps = {
   open: boolean

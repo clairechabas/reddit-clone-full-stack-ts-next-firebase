@@ -1,4 +1,4 @@
-import useDirectory from '@/src/hooks/useDirectory'
+import useDirectory from '@/hooks/useDirectory'
 import { Flex, MenuItem, Image, Icon } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React from 'react'

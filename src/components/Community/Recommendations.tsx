@@ -1,6 +1,6 @@
-import { Community } from '@/src/atoms/communitiesAtom'
-import { firestore } from '@/src/firebase/clientApp'
-import useCommunityData from '@/src/hooks/useCommunityData'
+import { Community } from '@/atoms/communitiesAtom'
+import { firestore } from '@/firebase/clientApp'
+import useCommunityData from '@/hooks/useCommunityData'
 import {
   Flex,
   Skeleton,

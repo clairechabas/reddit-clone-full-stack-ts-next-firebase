@@ -4,11 +4,11 @@ import { Flex, Icon, Input } from '@chakra-ui/react'
 import { FaReddit } from 'react-icons/fa'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useSetRecoilState } from 'recoil'
-import { authModalState } from '@/src/atoms/authModalAtom'
-import { auth } from '@/src/firebase/clientApp'
+import { authModalState } from '@/atoms/authModalAtom'
+import { auth } from '@/firebase/clientApp'
 import { IoImageOutline } from 'react-icons/io5'
 import { BsLink45Deg } from 'react-icons/bs'
-import useDirectory from '@/src/hooks/useDirectory'
+import useDirectory from '@/hooks/useDirectory'
 
 const CreatePostLink: React.FC = () => {
   const [user] = useAuthState(auth)

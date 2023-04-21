@@ -1,5 +1,5 @@
-import { firestore, storage } from '@/src/firebase/clientApp'
-import useSelectFile from '@/src/hooks/useSelectFile'
+import { firestore, storage } from '@/firebase/clientApp'
+import useSelectFile from '@/hooks/useSelectFile'
 import { Alert, AlertIcon, Flex, Icon, Text } from '@chakra-ui/react'
 import { User } from 'firebase/auth'
 import {

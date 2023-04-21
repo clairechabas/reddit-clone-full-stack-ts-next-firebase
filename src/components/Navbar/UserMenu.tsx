@@ -15,9 +15,9 @@ import { FaRedditSquare } from 'react-icons/fa'
 import { VscAccount } from 'react-icons/vsc'
 import { CgProfile } from 'react-icons/cg'
 import { MdOutlineLogin } from 'react-icons/md'
-import { auth } from '@/src/firebase/clientApp'
+import { auth } from '@/firebase/clientApp'
 import { useSetRecoilState } from 'recoil'
-import { authModalState } from '@/src/atoms/authModalAtom'
+import { authModalState } from '@/atoms/authModalAtom'
 import { IoSparkles } from 'react-icons/io5'
 
 type UserMenuProps = {

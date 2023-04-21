@@ -3,7 +3,7 @@ import CreateCommunityModal from '../../Modal/Community/CreateCommunityModal'
 import { Box, Flex, Icon, MenuItem, Text } from '@chakra-ui/react'
 import { GrAdd } from 'react-icons/gr'
 import { useRecoilValue } from 'recoil'
-import { communityState } from '@/src/atoms/communitiesAtom'
+import { communityState } from '@/atoms/communitiesAtom'
 import MenuListItem from './MenuListItem'
 import { FaReddit } from 'react-icons/fa'
 type CommunitiesProps = {}
