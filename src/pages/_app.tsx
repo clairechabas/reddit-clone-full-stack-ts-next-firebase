@@ -4,8 +4,18 @@ import { theme } from '../ui/theme'
 
 import Layout from '@/src/components/Layout'
 import { RecoilRoot } from 'recoil'
+import { NextPage } from 'next'
+import { ReactElement, ReactNode } from 'react'
 
-function App({ Component, pageProps }: AppProps) {
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode
+}
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+
+function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <RecoilRoot>
       <ChakraProvider theme={theme}>
