@@ -1,5 +1,5 @@
-import { Post } from '@/src/atoms/postAtom'
 import { firestore, storage } from '@/src/firebase/clientApp'
+import useSelectFile from '@/src/hooks/useSelectFile'
 import { Alert, AlertIcon, Flex, Icon, Text } from '@chakra-ui/react'
 import { User } from 'firebase/auth'
 import {
@@ -18,7 +18,6 @@ import { IoDocumentText, IoImageOutline } from 'react-icons/io5'
 import ImageUpload from './ImageUpload'
 import Tab from './Tab'
 import TextInputs from './TextInputs'
-import useSelectFile from '@/src/hooks/useSelectFile'
 
 type NewPostFormProps = {
   user: User
@@ -69,24 +68,22 @@ const NewPostForm: React.FC<NewPostFormProps> = ({
 
   const handleCreatePost = async () => {
     const { communityId } = router.query
-    // Create new post object of type Post
-    const newPost: Post = {
-      communityId: communityId as string,
-      communityImageUrl: communityImageUrl || '',
-      creatorId: user.uid,
-      creatorDisplayName: user.email!.split('@')[0],
-      title: textInputs.title,
-      body: textInputs.body,
-      numberOfComments: 0,
-      voteStatus: 0,
-      createdAt: serverTimestamp() as Timestamp,
-    }
 
     setLoading(true)
 
-    // Store post in `posts` collection in Firebase
     try {
-      const postDocRef = await addDoc(collection(firestore, 'posts'), newPost)
+      // Store new post in `posts` collection in Firebase
+      const postDocRef = await addDoc(collection(firestore, 'posts'), {
+        communityId: communityId as string,
+        communityImageUrl: communityImageUrl || '',
+        creatorId: user.uid,
+        creatorDisplayName: user.email!.split('@')[0],
+        title: textInputs.title,
+        body: textInputs.body,
+        numberOfComments: 0,
+        voteStatus: 0,
+        createdAt: serverTimestamp() as Timestamp,
+      })
 
       // Store post image if there's one
       if (selectedFile) {
